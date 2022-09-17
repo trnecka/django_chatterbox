@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views import View
 
 from base.models import Room
 
@@ -23,3 +24,8 @@ def search(request):
 
     context = {'q': q, 'rooms': rooms}
     return render(request, 'base/search.html', context)
+
+def room(request, id):
+    room = Room.objects.get(id=id)
+    context = {'room': room}
+    return render(request, 'base/room.html', context)

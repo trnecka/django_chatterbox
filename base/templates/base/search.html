@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chatterbox Search Results</title>
-</head>
-<body>
+{% extends 'main.html' %}
+
+{% block content %}
 <h1>Výsledky hledání pro: {{ q }}</h1>
 <ul>
     {% for room in rooms %}
-        <li><b>{{ room.name }}</b> [ {{ room.description }} ]</li>
+        <li>
+            <a href="{% url 'room' room.id %}">
+                <b>{{ room.name }}</b>
+            </a>
+            [ {{ room.description }} ]
+        </li>
     {% endfor %}
 </ul>
-</body>
-</html>
+{% endblock %}
