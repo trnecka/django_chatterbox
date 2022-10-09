@@ -24,5 +24,6 @@ urlpatterns = [
     path('search/', base.views.search, name='search'),
     path('room/<id>', base.views.room, name='room'),
     path('', base.views.RoomsView.as_view(), name='rooms'),
-    path('room_create', base.views.room_create, name='room_create'),
+    # path('room_create', base.views.room_create, name='room_create'),
+    path('room_create', base.views.RoomCreateView.as_view(), name='room_create')
 ]
