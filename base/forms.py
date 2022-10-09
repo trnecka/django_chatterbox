@@ -3,7 +3,7 @@ from logging import getLogger
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
-from base.models import Room
+from base.models import Room, Message
 
 LOGGER = getLogger()
 
