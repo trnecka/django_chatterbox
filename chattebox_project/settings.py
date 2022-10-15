@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,11 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# presmerovani uzivatele pokud je prihlasen
+# pouzivaji se aliasy ze souboru url.py
+LOGIN_REDIRECT_URL = 'rooms'
+
+# presmerovani uzivatele pokud neni prihlasen
+# pouzivaji se aliasy ze souboru url.py
+LOGOUT_REDIRECT_URL = 'login'
