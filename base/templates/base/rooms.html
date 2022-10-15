@@ -4,7 +4,13 @@
     <h1>Rooms</h1>
     <ul>
         {% for room in object_list %}
-            <li><a href="{% url 'room' room.id %}">{{ room.name }}</a> [ {{ room.description }} ]</li>
+            <li>
+                <a href="{% url 'room' room.id %}">{{ room.name }}</a> [ {{ room.description }} ]
+                <div class="last-child">
+                    <a href="{% url 'room_update' room.id %}">Edit</a>
+                    <a href="{% url 'room_delete' room.id %}">Delete</a>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

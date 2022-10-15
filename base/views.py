@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -13,7 +15,7 @@ from base.models import Room, Message
 def hello(request):
     s = request.GET.get('s', '')
     return HttpResponse(f'Hello, {s} world!')
-
+@login_required
 def search(request):
     q = request.GET.get('q', '')
     if q == '':
@@ -27,7 +29,7 @@ def search(request):
 
     context = {'q': q, 'rooms': rooms}
     return render(request, 'base/search.html', context)
-
+@login_required
 def room(request, id):
     room = Room.objects.get(id=id)
 
@@ -45,7 +47,7 @@ def room(request, id):
     context = {'room': room, 'messages': messages}
     return render(request, 'base/room.html', context)
 
-class RoomCreateView(CreateView):
+class RoomCreateView(LoginRequiredMixin, CreateView):
     template_name = 'base/room_form.html'
     form_class = RoomForm
     success_url = reverse_lazy('rooms')
@@ -67,7 +69,7 @@ class RoomCreateView(CreateView):
     def form_invalid(self, form):
         return super().form_invalid(form)
 
-class RoomUpdateView(UpdateView):
+class RoomUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'base/room_form.html'
     model = Room
     form_class = RoomForm
@@ -86,12 +88,13 @@ class RoomUpdateView(UpdateView):
 #             return redirect('rooms')
 #     return render(request, 'base/room_form.html', context)
 
-class RoomDeleteView(DeleteView):
+
+class RoomDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'base/room_confirm_delete.html'
     model = Room
     success_url = reverse_lazy('rooms')
 
-class RoomsView(ListView):
+class RoomsView(LoginRequiredMixin, ListView):
     template_name = 'base/rooms.html'
     model = Room
     '''
