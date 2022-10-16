@@ -2,9 +2,11 @@
     <li class="first active">
         <a href="{% url 'rooms' %}">Home</a>
     </li>
+    {% if perms.base.add_room %}
     <li>
         <a href="{% url 'room_create' %}">Create form</a>
     </li>
+    {% endif %}
     <li class="last-child">
         User {{ user }} is logged | <a href="{% url 'logout' %}">Logout</a>
     </li>

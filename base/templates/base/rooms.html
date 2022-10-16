@@ -7,8 +7,10 @@
             <li>
                 <a href="{% url 'room' room.id %}">{{ room.name }}</a> [ {{ room.description }} ]
                 <div class="last-child">
+                    {% if perms.base.delete_room and  perms.base.update_room %}
                     <a href="{% url 'room_update' room.id %}">Edit</a>
                     <a href="{% url 'room_delete' room.id %}">Delete</a>
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}

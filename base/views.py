@@ -1,5 +1,5 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -16,6 +16,7 @@ def hello(request):
     s = request.GET.get('s', '')
     return HttpResponse(f'Hello, {s} world!')
 @login_required
+@permission_required(['base.view_room', 'base.view_message'])
 def search(request):
     q = request.GET.get('q', '')
     if q == '':
@@ -30,6 +31,7 @@ def search(request):
     context = {'q': q, 'rooms': rooms}
     return render(request, 'base/search.html', context)
 @login_required
+@permission_required(['base.view_room', 'base.view_message'])
 def room(request, id):
     room = Room.objects.get(id=id)
 
@@ -47,10 +49,11 @@ def room(request, id):
     context = {'room': room, 'messages': messages}
     return render(request, 'base/room.html', context)
 
-class RoomCreateView(LoginRequiredMixin, CreateView):
+class RoomCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     template_name = 'base/room_form.html'
     form_class = RoomForm
     success_url = reverse_lazy('rooms')
+    permission_required = 'base.add_room' # pouze ve tvaru <jmeno_aplikace>.<nazev_opravneni>_<nazev_modelu>
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,11 +72,12 @@ class RoomCreateView(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         return super().form_invalid(form)
 
-class RoomUpdateView(LoginRequiredMixin, UpdateView):
+class RoomUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'base/room_form.html'
     model = Room
     form_class = RoomForm
     success_url = reverse_lazy('rooms')
+    permission_required = 'base.change_room'
 
     def form_invalid(self, form):
         return super().form_invalid(form)
@@ -89,14 +93,16 @@ class RoomUpdateView(LoginRequiredMixin, UpdateView):
 #     return render(request, 'base/room_form.html', context)
 
 
-class RoomDeleteView(LoginRequiredMixin, DeleteView):
+class RoomDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     template_name = 'base/room_confirm_delete.html'
     model = Room
     success_url = reverse_lazy('rooms')
+    permission_required = 'base.delete_room'
 
-class RoomsView(LoginRequiredMixin, ListView):
+class RoomsView(PermissionRequiredMixin, LoginRequiredMixin, ListView):
     template_name = 'base/rooms.html'
     model = Room
+    permission_required = 'base.view_room'
     '''
     # pokud dědím z TemplateView
     # v template je pak použitá proměnná rooms
